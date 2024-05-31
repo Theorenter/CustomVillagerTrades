@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang.NullArgumentException;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Villager;
@@ -71,7 +70,7 @@ public class VillagerData implements ConfigurationSerializable {
         this.customTradeKeys = customTradeKeys;
 
         if(customTradeKeys == null) {
-            throw new NullArgumentException("customTradeKeys doesn't exist");
+            throw new IllegalArgumentException("customTradeKeys doesn't exist");
         }
 
         // unserialize vanilla trade keys
@@ -82,7 +81,7 @@ public class VillagerData implements ConfigurationSerializable {
         List<Map<String, Object>> serializedVanillaTrades = (List<Map<String, Object>>) map.get("vanillaTrades");
 
         if(serializedVanillaTrades == null) {
-            throw new NullArgumentException("vanillaTrades doesn't exist");
+            throw new IllegalArgumentException("vanillaTrades doesn't exist");
         }
         
         serializedVanillaTrades.forEach(serializedVanillaTrade -> {

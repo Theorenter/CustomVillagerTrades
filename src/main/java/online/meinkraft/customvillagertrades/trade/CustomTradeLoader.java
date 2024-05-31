@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Biome;
@@ -414,9 +416,7 @@ public final class CustomTradeLoader {
             HashMap<?,?> enchantmentMap = (HashMap<?,?>) item;
 
             String enchantmentType =  (String) enchantmentMap.get("type");
-            Enchantment enchantment = new EnchantmentWrapper(
-                enchantmentType.toLowerCase()
-            ).getEnchantment();
+            Enchantment enchantment = Registry.ENCHANTMENT.get(new NamespacedKey(NamespacedKey.MINECRAFT, enchantmentType.toLowerCase()));
 
             Integer level = (Integer) enchantmentMap.get("level");
             if(level == null) level = 1;
