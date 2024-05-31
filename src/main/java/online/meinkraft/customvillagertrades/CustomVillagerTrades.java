@@ -1,5 +1,6 @@
 package online.meinkraft.customvillagertrades;
 
+import online.meinkraft.customvillagertrades.listener.*;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,13 +16,6 @@ import online.meinkraft.customvillagertrades.command.RerollCommand;
 import online.meinkraft.customvillagertrades.command.RestoreCommand;
 import online.meinkraft.customvillagertrades.exception.EconomyNotAvailableException;
 import online.meinkraft.customvillagertrades.exception.VaultNotAvailableException;
-import online.meinkraft.customvillagertrades.listener.InventoryClickListener;
-import online.meinkraft.customvillagertrades.listener.InventoryCloseListener;
-import online.meinkraft.customvillagertrades.listener.PlayerInteractEntityListener;
-import online.meinkraft.customvillagertrades.listener.TradeSelectListener;
-import online.meinkraft.customvillagertrades.listener.VillagerAcquireTradeListener;
-import online.meinkraft.customvillagertrades.listener.VillagerCareerChangeListener;
-import online.meinkraft.customvillagertrades.listener.VillagerDeathEventListener;
 import online.meinkraft.customvillagertrades.trade.CustomTradeManager;
 import online.meinkraft.customvillagertrades.trade.VanillaTrade;
 import online.meinkraft.customvillagertrades.util.UpdateChecker;
@@ -72,6 +66,7 @@ public class CustomVillagerTrades extends JavaPlugin implements PluginConfig {
     private VillagerManager villagerManager;
     private CustomTradeManager customTradeManager;
 
+    private final EntityRemoveListener entityRemoveListener = new EntityRemoveListener(this);
     private final VillagerAcquireTradeListener villagerAcquireTradeListener = new VillagerAcquireTradeListener(this);
     private final PlayerInteractEntityListener playerInteractEntityListener = new PlayerInteractEntityListener(this);
     private final VillagerDeathEventListener villagerDeathEventListener = new VillagerDeathEventListener(this);
@@ -206,6 +201,11 @@ public class CustomVillagerTrades extends JavaPlugin implements PluginConfig {
 
         // register listeners
         getServer().getPluginManager().registerEvents(
+                entityRemoveListener,
+                this
+        );
+
+        getServer().getPluginManager().registerEvents(
             villagerAcquireTradeListener, 
             this
         );
@@ -257,6 +257,7 @@ public class CustomVillagerTrades extends JavaPlugin implements PluginConfig {
         }
 
         // unregister listeners
+        HandlerList.unregisterAll(entityRemoveListener);
         HandlerList.unregisterAll(villagerAcquireTradeListener);
         HandlerList.unregisterAll(playerInteractEntityListener);
         HandlerList.unregisterAll(villagerDeathEventListener);

@@ -49,8 +49,7 @@ public class VillagerManager {
         return villagerData;
     }
 
-    public VillagerData loadVillagerData(Villager villager) {
-
+    public VillagerData loadVillagerData(Villager villager) {;
         BukkitObjectInputStream bukkitStream = null;
         VillagerData villagerData = null;
         String fileName = villager.getUniqueId().toString() + ".villager";

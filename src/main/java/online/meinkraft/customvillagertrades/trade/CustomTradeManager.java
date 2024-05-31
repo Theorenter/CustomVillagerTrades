@@ -363,7 +363,6 @@ public class CustomTradeManager {
         villager.setVillagerLevel(villagerLevel);
         villagerManager.saveVillagerData(villagerData);
         return true;
-    
     }
  
     public void restoreVanillaTrades(Villager villager) throws VillagerNotMerchantException {

@@ -26,15 +26,15 @@ public class VillagerAcquireTradeListener implements Listener {
 
     @EventHandler
     public void onVillagerAcquireTrade(VillagerAcquireTradeEvent event) {
-
-        Random rand = new Random();
-
+        /*
         // only allow villagers to acquire trades
         if(!event.getEntity().getType().equals(EntityType.VILLAGER)) {
             return;
         }
 
         Villager villager = (Villager) event.getEntity();
+
+        VillagerManager villagerManager = plugin.getVillagerManager();
 
         // don't allow nitwits or villagers with no profession to acquire trades
         if(
@@ -46,7 +46,6 @@ public class VillagerAcquireTradeListener implements Listener {
 
         CustomTradeManager tradeManager = plugin.getCustomTradeManager();
 
-        VillagerManager villagerManager = plugin.getVillagerManager();
         VillagerData villagerData = villagerManager.loadVillagerData(villager);
         
         List<CustomTrade> trades;
@@ -77,7 +76,7 @@ public class VillagerAcquireTradeListener implements Listener {
                 if(
                     plugin.isVanillaTradesAllowed() && 
                     !plugin.isVanillaTradesDisabledForProfession(villager.getProfession()) &&
-                    rand.nextDouble() > trade.getChance()
+                    new Random().nextDouble() > trade.getChance()
                 ) {
                     // keep vanilla trade
                     event.setRecipe(event.getRecipe());
@@ -94,7 +93,7 @@ public class VillagerAcquireTradeListener implements Listener {
         }
 
         villagerManager.saveVillagerData(villagerData);
-
+         */
     }
     
 }
