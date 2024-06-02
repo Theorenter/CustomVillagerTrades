@@ -27,6 +27,7 @@ public class PlayerInteractEntityListener implements Listener {
         this.plugin = plugin;
     }
 
+
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 
@@ -55,16 +56,15 @@ public class PlayerInteractEntityListener implements Listener {
             NamespacedKey.fromString("blueprint", plugin), 
             PersistentDataType.STRING
         );
-        
+
         // give blueprint to villager (only if they have a profession)
         if(
             blueprint != null &&
             !villager.getProfession().equals(Villager.Profession.NONE) &&
             !villager.getProfession().equals(Villager.Profession.NITWIT)
         ) {
-
+            System.out.println("Ну блюпринт есть");
             CustomTrade trade = tradeManager.getCustomTrade(blueprint);
-
             if(trade != null) {
                 // try to remove custom trade if sneaking
                 if(event.getPlayer().isSneaking()) {
@@ -74,7 +74,6 @@ public class PlayerInteractEntityListener implements Listener {
                 else {
                     tradeManager.forceCustomTrade(villager, trade); 
                 }
-                
             }
             
         }

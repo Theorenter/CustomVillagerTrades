@@ -26,7 +26,6 @@ public class VillagerAcquireTradeListener implements Listener {
 
     @EventHandler
     public void onVillagerAcquireTrade(VillagerAcquireTradeEvent event) {
-        /*
         // only allow villagers to acquire trades
         if(!event.getEntity().getType().equals(EntityType.VILLAGER)) {
             return;
@@ -46,8 +45,16 @@ public class VillagerAcquireTradeListener implements Listener {
 
         CustomTradeManager tradeManager = plugin.getCustomTradeManager();
 
+        // This method only update trades, so if villager no in manager =>
+        // it's default villager without trades
+        if(!villagerManager.has(villager)) {
+            return;
+        }
+
+        // TODO КОД НИЖЕ СКОПИРОВАТЬ И ПЕРЕНЕСТИ В РАННБЛЕ VillagerCareerChangeListener
+
         VillagerData villagerData = villagerManager.loadVillagerData(villager);
-        
+
         List<CustomTrade> trades;
         try {
             trades = tradeManager.getValidTrades(villager, villagerData);
@@ -79,21 +86,22 @@ public class VillagerAcquireTradeListener implements Listener {
                     new Random().nextDouble() > trade.getChance()
                 ) {
                     // keep vanilla trade
+                    System.out.println("Добавлен ванильный рецепт");
                     event.setRecipe(event.getRecipe());
                 }
                 else {
                     // set custom trade
+                    System.out.println("Добавлен кастомный рецепт");
+                    System.out.println(trade.getKey());
                     event.setRecipe(trade.getRecipe());
                     villagerData.addCustomTradeKey(
                         index,
                         trade.getKey()
                     );
                 }
-            } 
+            }
         }
-
         villagerManager.saveVillagerData(villagerData);
-         */
     }
     
 }

@@ -13,7 +13,6 @@ import org.bukkit.event.entity.VillagerCareerChangeEvent;
 import online.meinkraft.customvillagertrades.CustomVillagerTrades;
 import online.meinkraft.customvillagertrades.villager.VillagerManager;
 import org.bukkit.inventory.Merchant;
-import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -37,66 +36,49 @@ public class VillagerCareerChangeListener implements Listener {
         Villager villager = event.getEntity();
         villagerManager.remove(villager);
 
+        if(villager.getProfession() != Villager.Profession.NITWIT && villager.getProfession() != Villager.Profession.NONE)
+            return;
 
-        // Code that performs after villager change their profession.
-        //
-        // VillagerAcquireTradeListener works incorrectly when new villager gets custom trades, IDK why.
-        // I wrote this to fix the problem.
         new BukkitRunnable() {
             @Override
-            public void run() {
-                // Don't need to set custom trades if villager profession is none or nitwit
-                if(villager.getProfession().equals(Villager.Profession.NONE) ||
-                        villager.getProfession().equals(Villager.Profession.NITWIT)
-                ) {
-                    return;
-                }
-
-                // After profession changed
+            public void run () {
                 CustomTradeManager tradeManager = plugin.getCustomTradeManager();
-
                 VillagerData villagerData = villagerManager.loadVillagerData(villager);
 
-                List<CustomTrade> trades;
-                try {
-                    trades = tradeManager.getValidTrades(villager, villagerData);
-                } catch (VillagerNotMerchantException e) {
-                    return;
-                }
-                for (int i = 0; i <= villager.getRecipeCount(); i++) {
-                    villagerData.addVanillaTrade(villager.getVillagerLevel(), villager.getRecipe(i));
-                    int index = villagerData.getVanillaTrades().size() - 1;
+                for(int i = 0; i < villager.getRecipeCount(); i++) {
 
-                    if(trades.size() == 0) {
+                    List<CustomTrade> trades;
+                    try {
+                        trades = tradeManager.getValidTrades(villager, villagerData);
+                    } catch (VillagerNotMerchantException e) {
+                        return;
+                    }
+
+                    if (trades.size() == 0) {
                         // don't allow villager to acquire vanilla trade if they are disabled
-                        if(
+                        if (
                                 !plugin.isVanillaTradesAllowed() ||
                                         plugin.isVanillaTradesDisabledForProfession(villager.getProfession())
                         ) {
                             event.setCancelled(true);
                         }
-                    }
-                    else {
+                    } else {
                         CustomTrade trade = tradeManager.chooseRandomTrade(trades);
 
                         // it can happen if all of the trades have a zero chance
-                        if(trade != null) {
+                        if (trade != null) {
                             // chance of not getting the trade (if vanilla trades aren't disabled)
-                            if(
+                            if (
                                     plugin.isVanillaTradesAllowed() &&
                                             !plugin.isVanillaTradesDisabledForProfession(villager.getProfession()) &&
                                             new Random().nextDouble() > trade.getChance()
                             ) {
                                 // keep vanilla trade
-                                villager.setRecipe(i, villager.getRecipe(i));
-                            }
-                            else {
+                                //villager.setRecipe(event.getRecipe());
+                            } else {
                                 // set custom trade
                                 villager.setRecipe(i, trade.getRecipe());
-                                villagerData.addCustomTradeKey(
-                                        index,
-                                        trade.getKey()
-                                );
+                                villagerData.addCustomTradeKey(i, trade.getKey());
                             }
                         }
                     }
